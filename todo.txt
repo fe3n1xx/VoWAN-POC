@@ -1,0 +1,15 @@
+todo:
+Bank:
+- Create Balance Checker
+- Allow NFC Registration
+- Allow Transactions
+- Allow NFC Scans
+
+Host:
+- Host NFC Registrations
+- Host Transactions
+- Host NFC Scans
+- Get Paid
+
+Pool:
+- 
