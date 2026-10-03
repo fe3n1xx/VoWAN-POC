@@ -123,7 +123,63 @@ if r == 1:
                 
     except KeyboardInterrupt:
         print("\nEnding script.")
+    
+    FILE = Path("h-1234.txt").resolve()
 
+
+    class TextFileHandler(FileSystemEventHandler):
+        def __init__(self):
+            self.last_position = 0
+
+            # Ignore text already in the file when the watcher starts.
+            if FILE.exists():
+                with FILE.open("r", encoding="utf-8") as file:
+                    file.seek(0, 2)
+                    self.last_position = file.tell()
+
+        def on_modified(self, event):
+            if (
+                not event.is_directory
+                and Path(event.src_path).resolve() == FILE
+            ):
+                with FILE.open("r", encoding="utf-8") as file:
+                    file.seek(self.last_position)
+                    newtext = file.read()
+                    self.last_position = file.tell()
+
+            if newtext:
+                print("UPDATE")
+                print(newtext)
+                # if statements 1
+                if "ALLOWING TRANSACTIONS FROM " in newtext:
+                    toid = newtext.replace("ALLOWING TRANSACTIONS FROM ", "")
+                current_transaction = "NFCREG1"   
+
+                # if statements 2
+                if current_transaction == "NFCREG1":
+                    # nfc registration
+                    print("tmp")
+
+
+
+observer = Observer()
+
+observer.schedule(
+    TextFileHandler(),
+    str(FILE.parent),
+    recursive=False
+)
+
+observer.start()
+
+try:
+    while True:
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("\nEnding watcher.")
+    observer.stop()
+    observer.join()
 
 
 if r == 2:
@@ -155,6 +211,7 @@ if r == 2:
 
                 if newtext:
                     print("UPDATE")
+                    print(newtext)
                     if "REG NFC" in newtext:
                         newtext.replace("REQHOST ", "", "REG NFC VAL ", "", "FROM", "")
                         #tmp
@@ -167,25 +224,27 @@ if r == 2:
                             pooler_2 = findpooler()
                             if pooler_1 == pooler_2:
                                 print("Could not find a second pooler for this Transaction, Continuing with 1 pooler")
-                        current_transaction = "REQHOST"
+                        current_transaction = "NFCFIND "
                         sender_file = sender_id.replace(".", "")
                         sender_file = sender_file + ".txt"
                         with open(sender_file, "a") as file:
-                            file.write("ALLOWING TRANSACTIONS FROM ", id)
+                            file.write(f"ALLOWING TRANSACTIONS FROM {id}")
                     
                     # if the current transaction is: "str", do: e.g. if current_transaction == "REQHOST"
 
                     if current_transaction == "REQHOST":
                         # do: continue transaction
+                        print("tmp-remove")
                     
 
-    observer = Observer()
-    observer.schedule(
-        TextFileHandler(),
-        str(FILE.parent),
-        recursive=False
-    )
-    observer.start()
+observer = Observer()
+
+observer.schedule(
+    TextFileHandler(),
+    str(FILE.parent),
+    recursive=False
+)
+observer.start()
 
 if r == 3:
     print("Welcome to the Pooler Portal! ID:", id)

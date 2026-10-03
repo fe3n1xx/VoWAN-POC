@@ -1,15 +1,29 @@
 todo:
 Bank:
-- Create Balance Checker
-- Allow NFC Registration
+- Create Balance Checker - DONE
+- Allow NFC Registration - Working 
 - Allow Transactions
 - Allow NFC Scans
 
 Host:
-- Host NFC Registrations
+- Host NFC Registrations - Working
 - Host Transactions
 - Host NFC Scans
-- Get Paid
+- Get Paid for Host
+- Store DB of all users
 
 Pool:
-- 
+- Pool for NFC Registrations - Working
+- Store DB of all users
+- Update whole pool database
+
+All:
+- Finished v1.0.0
+
+PROBLEMS FOR V1.0.1:
+- List machines as "busy" when they are doing a transaction
+/-> e.g.
+    if "busy" in str(var):
+        print("User Busy")
+    else:
+        # whatever code 
